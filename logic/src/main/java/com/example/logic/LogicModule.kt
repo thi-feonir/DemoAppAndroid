@@ -6,4 +6,5 @@ val logicModule = module {
     factoryOf(::CountryDetailsLogic)
     factoryOf(::CountryListLogic)
     factoryOf(::ServerStatusLogic)
+    factoryOf(::FetchAboutMessageUseCase)
 }

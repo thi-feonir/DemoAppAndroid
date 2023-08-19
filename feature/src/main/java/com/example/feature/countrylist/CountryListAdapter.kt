@@ -29,7 +29,7 @@ fun CountryListAdapter(
             viewModel.onCountrySelected(country)
         },
         onRefreshTapped = { viewModel.onRefreshTapped() },
-        onFailOtherTapped = { viewModel.onFailOtherTapped() }
+        onFailOtherTapped = { onAboutSelected.invoke() }
     )
 
     FloatingAlertNotifier(

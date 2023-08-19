@@ -7,4 +7,5 @@ val repositoriesModule = module {
     singleOf(::CountryDetailsPullBasedRepository)
     singleOf(::CountryListPushBasedRepository)
     singleOf(::ServerStatusPushBasedRepository)
+    singleOf(::AboutRepository)
 }
