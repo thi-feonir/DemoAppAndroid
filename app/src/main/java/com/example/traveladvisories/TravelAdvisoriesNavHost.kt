@@ -11,10 +11,12 @@ import com.example.feature.countrydetails.CountryDetailsAdapter
 import com.example.feature.countrylist.CountryListAdapter
 import com.example.domainmodels.Country
 import com.example.feature.about.AboutAdapter
+import com.example.feature.hashtags.HashtagListAdapter
 
 sealed class TravelAdvisoriesDestination(val route: String) {
     object AboutDestination: TravelAdvisoriesDestination("about")
     object CountryListDestination : TravelAdvisoriesDestination("countries")
+    object HashtagListDestination : TravelAdvisoriesDestination("hashtags")
     object CountryDetailsDestination : TravelAdvisoriesDestination("country") {
         const val regionCodeArg = "region_code"
     }
@@ -26,7 +28,7 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
         navController.navigate("${TravelAdvisoriesDestination.CountryDetailsDestination.route}/${it.regionCode}")
     }
     val onAboutSelected = {
-        navController.navigate("${TravelAdvisoriesDestination.AboutDestination.route}")
+        navController.navigate(TravelAdvisoriesDestination.HashtagListDestination.route)
     }
 
     NavHost(
@@ -35,6 +37,9 @@ fun TravelAdvisoriesNavHost(navController: NavHostController = rememberNavContro
     ) {
         composable(route = TravelAdvisoriesDestination.AboutDestination.route) {
             AboutAdapter()
+        }
+        composable(route = TravelAdvisoriesDestination.HashtagListDestination.route) {
+            HashtagListAdapter()
         }
         composable(route = TravelAdvisoriesDestination.CountryListDestination.route) {
             CountryListAdapter(

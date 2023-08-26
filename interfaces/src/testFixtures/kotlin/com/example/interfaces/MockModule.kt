@@ -6,4 +6,7 @@ val networkLogicApiMocks = module {
     single<ITravelAdvisoriesApi> {
         MockTravelApi()
     }
+    single<HashtagApi> {
+        MockHashTagApi()
+    }
 }
