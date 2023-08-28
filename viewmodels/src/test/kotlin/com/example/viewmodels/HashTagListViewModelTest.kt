@@ -38,7 +38,14 @@ class HashTagListViewModelTest : KoinTest {
     @Test
     fun `screen is loaded, state is list of hashtags`() {
         val expectedList = listOf(
-            HashTag(id = "1", text = "#123"), HashTag(id = "2", text = "#321")
+            HashTag(id = "1", text = "#GayPride"),
+            HashTag(id = "2", text = "#LGBTQI+"),
+            HashTag(id = "2", text = "#Trans"),
+            HashTag(id = "2", text = "#Queer"),
+            HashTag(id = "2", text = "#Lesbians"),
+            HashTag(id = "2", text = "#Pride"),
+            HashTag(id = "2", text = "#PrideFlag"),
+            HashTag(id = "2", text = "#Scruff"),
         )
 
         val stateObserver = hashTagListViewModel.state.test()
