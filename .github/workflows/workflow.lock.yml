@@ -26,7 +26,7 @@
 # punctuation, and casing conventions, then either finishes silently or posts
 # constructive feedback with suggested improvements.
 #
-# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"813cd68b07af9001d469de6b37dcae54cfeee1cb9619a065f3a215e794426626","compiler_version":"v0.57.0","strict":true}
+# gh-aw-metadata: {"schema_version":"v2","frontmatter_hash":"2b4dea00adef5359d8273e4ce6321724a677c8cf06d6296a9a53dfe7823b4bea","compiler_version":"v0.57.0","strict":true}
 
 name: "Strings Consistency Checker"
 "on":
@@ -36,6 +36,23 @@ name: "Strings Consistency Checker"
     types:
     - opened
     - synchronize
+  workflow_call:
+    inputs:
+      pr_number:
+        description: Pull request number in the calling repository
+        required: true
+        type: number
+      repo:
+        description: Full repository name (owner/repo) of the calling repository
+        required: true
+        type: string
+    outputs:
+      comment_id:
+        description: ID of the first added comment
+        value: ${{ jobs.safe_outputs.outputs.comment_id }}
+      comment_url:
+        description: URL of the first added comment
+        value: ${{ jobs.safe_outputs.outputs.comment_url }}
 
 permissions: {}
 
@@ -128,6 +145,8 @@ jobs:
         env:
           GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
           GH_AW_SAFE_OUTPUTS: ${{ env.GH_AW_SAFE_OUTPUTS }}
+          GH_AW_EXPR_3D788969: ${{ inputs.repo || github.repository }}
+          GH_AW_EXPR_B7DB4AAB: ${{ inputs.pr_number || github.event.pull_request.number }}
           GH_AW_GITHUB_ACTOR: ${{ github.actor }}
           GH_AW_GITHUB_EVENT_COMMENT_ID: ${{ github.event.comment.id }}
           GH_AW_GITHUB_EVENT_DISCUSSION_NUMBER: ${{ github.event.discussion.number }}
@@ -190,7 +209,8 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
-          GH_AW_GITHUB_EVENT_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          GH_AW_EXPR_B7DB4AAB: ${{ inputs.pr_number || github.event.pull_request.number }}
+          GH_AW_EXPR_3D788969: ${{ inputs.repo || github.repository }}
         with:
           script: |
             const { setupGlobals } = require('/opt/gh-aw/actions/setup_globals.cjs');
@@ -201,6 +221,8 @@ jobs:
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
           GH_AW_PROMPT: /tmp/gh-aw/aw-prompts/prompt.txt
+          GH_AW_EXPR_3D788969: ${{ inputs.repo || github.repository }}
+          GH_AW_EXPR_B7DB4AAB: ${{ inputs.pr_number || github.event.pull_request.number }}
           GH_AW_GITHUB_ACTOR: ${{ github.actor }}
           GH_AW_GITHUB_EVENT_COMMENT_ID: ${{ github.event.comment.id }}
           GH_AW_GITHUB_EVENT_DISCUSSION_NUMBER: ${{ github.event.discussion.number }}
@@ -221,6 +243,8 @@ jobs:
             return await substitutePlaceholders({
               file: process.env.GH_AW_PROMPT,
               substitutions: {
+                GH_AW_EXPR_3D788969: process.env.GH_AW_EXPR_3D788969,
+                GH_AW_EXPR_B7DB4AAB: process.env.GH_AW_EXPR_B7DB4AAB,
                 GH_AW_GITHUB_ACTOR: process.env.GH_AW_GITHUB_ACTOR,
                 GH_AW_GITHUB_EVENT_COMMENT_ID: process.env.GH_AW_GITHUB_EVENT_COMMENT_ID,
                 GH_AW_GITHUB_EVENT_DISCUSSION_NUMBER: process.env.GH_AW_GITHUB_EVENT_DISCUSSION_NUMBER,
